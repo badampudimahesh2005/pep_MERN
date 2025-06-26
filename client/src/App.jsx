@@ -3,27 +3,30 @@ import Login from './components/Login'
 import Register from './components/Register'
 import AppLayout from './layout/AppLayout'
 import Dashboard from './pages/Dashboard'
-import { useState, useEffect } from 'react'
+import {  useEffect } from 'react'
 import axios from 'axios'
+
+import {useDispatch, useSelector} from 'react-redux'
+import { setUser } from './store/slices/userSlice'
 
 const App = () => {
 
-  const [userDetails, setUserDetails] = useState(null);
+  const userDetails = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  const updateUserDetails = (details) => {
-    setUserDetails(details);
-  };
+
 
   // Check if user is logged in by making an API call
   const checkUserLoggedIn = async () => {
     try {
       const response = await axios.get('http://localhost:3000/auth/check', { withCredentials: true });
+      console.log("User login status response:", response.data);
       if (response.data.isLoggedIn) {
-        updateUserDetails(response.data.userDetails);
+        dispatch(setUser(response.data.userDetails));
       }
     } catch (error) {
       console.error('Error checking user login status:', error);
-      setUserDetails(null);
+      dispatch(setUser(null));
     }
   };
 
@@ -40,15 +43,15 @@ const App = () => {
         userDetails 
         ? <Navigate to='/dashboard' /> 
         : <AppLayout> 
-          <Login updateUserDetails={updateUserDetails} /> 
+          <Login /> 
           </AppLayout>
         } />
 
-      <Route path="/register" element={userDetails? <Navigate to='/dashboard' /> : <AppLayout> <Register updateUserDetails={updateUserDetails} /> </AppLayout>} />
+      <Route path="/register" element={userDetails? <Navigate to='/dashboard' /> : <AppLayout> <Register /> </AppLayout>} />
 
       <Route path='/dashboard' element={
         userDetails
-        ? <AppLayout> <Dashboard userDetails={userDetails} /> </AppLayout>
+        ? <AppLayout> <Dashboard /> </AppLayout>
         : <Navigate to='/login' />
       } />
       

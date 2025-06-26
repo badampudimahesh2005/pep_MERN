@@ -3,12 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import {GoogleOAuthProvider, GoogleLogin} from '@react-oauth/google';
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/slices/userSlice";
 
-const Login = ({updateUserDetails}) => {
-  const [user, setUser] = useState({
+const Login = () => {
+  const [userData, setUserData] = useState({
     email: '',
     password: ''
   });
+
+  const dispatch = useDispatch();
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -18,8 +22,8 @@ const Login = ({updateUserDetails}) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser({
-      ...user,
+    setUserData({
+      ...userData,
       [name]: value
     });
   };
@@ -29,17 +33,21 @@ const Login = ({updateUserDetails}) => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', user, { withCredentials: true });
+      const response = await axios.post('http://localhost:3000/auth/login', userData, { withCredentials: true });
       console.log('Login successful:', response.data);
-      updateUserDetails(response.data.userDetails);
+      dispatch(setUser(response.data.userDetails));
       setError(null);
-      setUser({
+      setUserData({
       email: '',
       password: ''
     });
     } catch (error) {
-      console.error('Login failed:', error);
-      setError('Invalid email or password');
+      if(error?.response?.status === 401) {
+        setError('Invalid email or password');
+      }else{
+        console.error('Login failed:', error);
+        setError('Something went wrong with login');
+      }
     }
   };
 
@@ -50,7 +58,7 @@ const Login = ({updateUserDetails}) => {
         idToken: authResponse.credential
       }, { withCredentials: true });
       console.log('Google login successful:', response.data);
-      updateUserDetails(response.data.userDetails);
+      dispatch(setUser(response.data.userDetails));
       setError(null);
     } catch (error) {
       console.error('Google login failed:', error);
@@ -61,15 +69,15 @@ const Login = ({updateUserDetails}) => {
 
 
   const validateForm = () => {
-    if (!user.email || !user.password) {
+    if (!userData.email || !userData.password) {
       setError('Please fill in all fields');
       return false;
     }
-    if (!/\S+@\S+\.\S+/.test(user.email)) {
+    if (!/\S+@\S+\.\S+/.test(userData.email)) {
       setError('Please enter a valid email address');
       return false;
     }
-    if (user.password.length < 6) {
+    if (userData.password.length < 6) {
       setError('Password must be at least 6 characters long');
       return false;
     }
@@ -85,7 +93,7 @@ const Login = ({updateUserDetails}) => {
         <input
           type="email"
           name="email" 
-          value={user.email}
+          value={userData.email}
           onChange={handleChange}
           className="border border-gray-300 p-2 rounded w-full mb-4"
         />
@@ -94,7 +102,7 @@ const Login = ({updateUserDetails}) => {
         <input
           type={passwordVisible ? "text" : "password"}
           name="password" 
-          value={user.password}
+          value={userData.password}
           onChange={handleChange}
           className="border border-gray-300 p-2 rounded w-full mb-4"
         />

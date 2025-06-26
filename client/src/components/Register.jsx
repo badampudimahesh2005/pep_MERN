@@ -2,15 +2,19 @@
 import axios from 'axios';
 import {useState} from 'react';
 import { Eye, EyeOff } from 'lucide-react'; 
+import { setUser } from '../store/slices/userSlice';
+import { useDispatch } from 'react-redux';
 
 
-const Register = ({updateUserDetails}) => {
+const Register = () => {
 
-  const [user, setUser] = useState({
+  const [userData, setUserData] = useState({
     username: '',
     email: '',
     password: ''
   });
+
+  const dispatch = useDispatch();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const [error, setError] = useState(null);
@@ -21,11 +25,11 @@ const Register = ({updateUserDetails}) => {
 
     try{
 
-      const response = await axios.post('http://localhost:3000/auth/signup', user, { withCredentials: true });
+      const response = await axios.post('http://localhost:3000/auth/signup', userData, { withCredentials: true });
       console.log("register successful", response.data);
-      updateUserDetails(response.data.userDetails);
+      dispatch(setUser(response.data.userDetails));
       setError(null);
-      setUser({
+      setUserData({
         username: '',
         email: '',
         password: ''
@@ -38,15 +42,15 @@ const Register = ({updateUserDetails}) => {
   }
 
   const validateForm = () => {
-    if (!user.username || !user.email || !user.password) {
+    if (!userData.username || !userData.email || !userData.password) {
       setError("All fields are required");
       return false;
     }
-    if (!/\S+@\S+\.\S+/.test(user.email)) {
+    if (!/\S+@\S+\.\S+/.test(userData.email)) {
       setError("Please enter a valid email address");
       return false;
     }
-    if (user.password.length < 6) {
+    if (userData.password.length < 6) {
       setError("Password must be at least 6 characters long");
       return false;
     }
@@ -56,8 +60,8 @@ const Register = ({updateUserDetails}) => {
 
   const handleChange = (e) => {
     const {name, value} = e.target;
-    setUser({
-      ...user,
+    setUserData({
+      ...userData,
       [name]: value
     });
   };
@@ -73,7 +77,7 @@ const Register = ({updateUserDetails}) => {
           name="username"
           id="username"
           placeholder="Username"
-          value={user.username}
+          value={userData.username}
           onChange={handleChange}
           className='border border-gray-300 p-2 rounded w-full mb-4'
           required
@@ -84,7 +88,7 @@ const Register = ({updateUserDetails}) => {
           name="email"
           id="email"
           placeholder="Email"
-          value={user.email}
+          value={userData.email}
           onChange={handleChange}
           className='border border-gray-300 p-2 rounded w-full mb-4'
           required
@@ -96,7 +100,7 @@ const Register = ({updateUserDetails}) => {
             name="password"
             id="password"
             placeholder="Password"
-            value={user.password}
+            value={userData.password}
             onChange={handleChange}
             className='border border-gray-300 p-2 rounded w-full mb-4'
             required
