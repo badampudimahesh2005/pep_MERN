@@ -1,6 +1,31 @@
-import { Link } from "react-router-dom"
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
+import SERVER_URL from "../utils";
+
+import { clearUser } from "../store/slices/userSlice";
+
+
 
 const Header = () => {
+
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+  const handleLogin = async () => {
+    try {
+    const response = await axios.post(`${SERVER_URL}/auth/logout`, {}, { withCredentials: true });
+    console.log("Logout successful", response.data);
+    dispatch(clearUser());
+    navigate("/");
+    
+    } catch (error) {
+      console.error("Logout failed", error);
+    } 
+  }
+
+
   return (
     <>
 
@@ -10,8 +35,19 @@ const Header = () => {
           <Link to="/" >E-Commerce</Link>
         </div>
         <div className="space-x-4">
-          <Link to="/login" className="text-pink-500 hover:text-gray-300">Login</Link>
-          <Link to="/register" className="text-pink-500 hover:text-gray-300">Register</Link>
+
+          {user ?
+            <>
+              <Link to="/dashboard" className="text-gray-700 hover:text-pink-500">Dashboard</Link>
+              <button onClick={handleLogin} className="text-gray-700 hover:text-pink-500">Logout</button>
+            </>
+          :(
+            <>
+              <Link to="/login" className="text-gray-700 hover:text-pink-500">Login</Link>
+              <Link to="/register" className="text-gray-700 hover:text-pink-500">Register</Link>
+            </>
+          )}
+          
         </div>
       </div>
 

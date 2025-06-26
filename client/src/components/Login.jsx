@@ -5,6 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 import {GoogleOAuthProvider, GoogleLogin} from '@react-oauth/google';
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/userSlice";
+import SERVER_URL from "../utils";
 
 const Login = () => {
   const [userData, setUserData] = useState({
@@ -33,7 +34,7 @@ const Login = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:3000/auth/login', userData, { withCredentials: true });
+      const response = await axios.post(`${SERVER_URL}/auth/login`, userData, { withCredentials: true });
       console.log('Login successful:', response.data);
       dispatch(setUser(response.data.userDetails));
       setError(null);
@@ -54,7 +55,7 @@ const Login = () => {
   
   const handleGoogleSignIn = async (authResponse) => {
     try {
-      const response = await axios.post('http://localhost:3000/auth/google-login', {
+      const response = await axios.post(`${SERVER_URL}/auth/google-login`, {
         idToken: authResponse.credential
       }, { withCredentials: true });
       console.log('Google login successful:', response.data);

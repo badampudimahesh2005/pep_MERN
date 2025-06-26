@@ -4,6 +4,8 @@ import {useState} from 'react';
 import { Eye, EyeOff } from 'lucide-react'; 
 import { setUser } from '../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
+import SERVER_URL from '../utils';
+
 
 
 const Register = () => {
@@ -25,7 +27,7 @@ const Register = () => {
 
     try{
 
-      const response = await axios.post('http://localhost:3000/auth/signup', userData, { withCredentials: true });
+      const response = await axios.post(`${SERVER_URL}/auth/signup`, userData, { withCredentials: true });
       console.log("register successful", response.data);
       dispatch(setUser(response.data.userDetails));
       setError(null);

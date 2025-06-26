@@ -8,6 +8,7 @@ import axios from 'axios'
 
 import {useDispatch, useSelector} from 'react-redux'
 import { setUser } from './store/slices/userSlice'
+import SERVER_URL from './utils'
 
 const App = () => {
 
@@ -19,8 +20,7 @@ const App = () => {
   // Check if user is logged in by making an API call
   const checkUserLoggedIn = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/auth/check', { withCredentials: true });
-      console.log("User login status response:", response.data);
+      const response = await axios.get(`${SERVER_URL}/auth/check`, { withCredentials: true });
       if (response.data.isLoggedIn) {
         dispatch(setUser(response.data.userDetails));
       }
