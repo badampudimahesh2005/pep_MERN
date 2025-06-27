@@ -5,6 +5,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import { setUser } from '../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import SERVER_URL from '../utils';
+import { Link } from 'react-router-dom';
 
 
 
@@ -118,7 +119,8 @@ const Register = () => {
         </div>
        
         {error && <p className='text-red-500 mb-4'>{error}</p>}
-        <button type="submit" className='bg-pink-500 text-white p-2 rounded hover:bg-pink-300 cursor-pointer'>Register</button>
+         <Link to="/login" className=" mb-4">Already have an account?<span className="text-blue-500 hover:underline"> Login here</span></Link>
+        <button type="submit" className='bg-[#0d1b2a] text-white p-2 rounded hover:bg-gray-700 cursor-pointer'>Register</button>
 
       </form>
     </div>
@@ -127,22 +129,3 @@ const Register = () => {
 
 export default Register
 
-//  <div className="mb-4 relative">
-//       <label htmlFor="password" className="block">Password</label>
-//       <input 
-//       id="password"
-//       type={passwordVisible ? "text" : "password"}
-//       value={password}
-//       onChange={(e)=> setPassword(e.target.value)} 
-//       placeholder="Enter your password"
-//       className="w-full p-2 mt-1 border border-gray-500 rounded-md focus:outline-none outline-none "
-     
-//       />
-//       <button 
-//       type="button"
-//       onClick={() => setPasswordVisible(!passwordVisible)}
-//       className="absolute inset-y-0 top-7 cursor-pointer right-3 flex items-center text-gray-500"
-//       >
-//         {passwordVisible ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
-//       </button>
-//     </div>

@@ -5,7 +5,7 @@ const {OAuth2Client} = require("google-auth-library");
 
 const {validationResult} = require("express-validator");
 
-const JWT_SECRET = "your_jwt_secret_key_here";
+const JWT_SECRET = process.env.JWT_SECRET ;
 
 const login = async (req, res) => {
   try {

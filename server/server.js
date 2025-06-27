@@ -6,6 +6,7 @@ const connectDB = require('./src/config/mongodb');
 
 
 const authRoutes = require('./src/routes/authRoutes');
+const linkRoutes = require('./src/routes/linksRoutes');
 
 
 const app = express();
@@ -27,6 +28,7 @@ connectDB()
 
 
 app.use('/auth', authRoutes);
+app.use('/links', linkRoutes);
 
 
 app.listen(port, () => {

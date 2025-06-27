@@ -117,7 +117,7 @@ const Login = () => {
        </div>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <Link to="/register" className=" mb-4">Don't have an account?<span className="text-blue-500 hover:underline"> Register here</span></Link>
-        <button type="submit" className="bg-pink-500 text-white p-2 rounded cursor-pointer hover:bg-pink-300 mb-4">Login</button>
+        <button type="submit" className="bg-[#0d1b2a] text-white p-2 rounded cursor-pointer hover:bg-gray-700 mb-4">Login</button>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <GoogleLogin
             onSuccess={handleGoogleSignIn}
