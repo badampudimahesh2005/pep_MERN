@@ -6,6 +6,7 @@ import { setUser } from '../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
 import SERVER_URL from '../utils';
 import { Link } from 'react-router-dom';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 
 
@@ -69,9 +70,24 @@ const Register = () => {
     });
   };
 
+
+   const handleGoogleSignIn = async (authResponse) => {
+    try {
+      const response = await axios.post(`${SERVER_URL}/auth/google-login`, {
+        idToken: authResponse.credential
+      }, { withCredentials: true });
+      console.log('Google login successful:', response.data);
+      dispatch(setUser(response.data.userDetails));
+      setError(null);
+    } catch (error) {
+      console.error('Google login failed:', error);
+      setError('Something went wrong with Google login');
+    }
+  }
+   
   return (
     <div className='bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto mt-10 '>
-      <h1 className='text-xl text-center mb-4 font-bold'>Register</h1>
+      <h1 className='text-xl text-center mb-4 font-bold text-[#0d1b2a]'>Sign up with a new account</h1>
       <form onSubmit={handleSubmit} className='flex flex-col '>
 
         <label htmlFor="username" className='block mb-2'>Name:</label>
@@ -119,10 +135,26 @@ const Register = () => {
         </div>
        
         {error && <p className='text-red-500 mb-4'>{error}</p>}
-         <Link to="/login" className=" mb-4">Already have an account?<span className="text-blue-500 hover:underline"> Login here</span></Link>
-        <button type="submit" className='bg-[#0d1b2a] text-white p-2 rounded hover:bg-gray-700 cursor-pointer'>Register</button>
+         <Link to="/login" className=" mb-4 text-gray-700 ml-2">Already have an account?<span className="text-blue-500 hover:underline"> Sign In here</span></Link>
+        <button type="submit" className='bg-[#0d1b2a] text-white p-2 rounded hover:bg-gray-700 cursor-pointer'>Sign Up</button>
 
       </form>
+
+       <div>
+      <div className="flex items-center justify-center my-4">
+        <hr className="flex-grow border-gray-300" />
+        <span className="mx-2 text-gray-500">Or</span>
+        <hr className="flex-grow border-gray-300" />
+      </div>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+          <GoogleLogin
+            onSuccess={handleGoogleSignIn}
+            onError={() => setError('Google login failed')}
+            className="mt-2"
+          />
+        </GoogleOAuthProvider>
+     </div>
+
     </div>
   )
 }

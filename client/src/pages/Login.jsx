@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import {GoogleOAuthProvider, GoogleLogin} from '@react-oauth/google';
@@ -19,7 +19,6 @@ const Login = () => {
 
   const [error, setError] = useState(null);
 
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +86,7 @@ const Login = () => {
 
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto mt-10 ">
-      <h1 className="text-xl text-center font-bold mb-4">Login Page</h1>
+      <h1 className="text-xl text-center font-bold mb-4 text-[#0d1b2a]">Sign in to Continue</h1>
       <form onSubmit={handleSubmit} className="flex flex-col">
        
         <label className="block mb-2">Email:</label>
@@ -116,8 +115,17 @@ const Login = () => {
         </button>
        </div>
         {error && <p className="text-red-500 mb-4">{error}</p>}
-        <Link to="/register" className=" mb-4">Don't have an account?<span className="text-blue-500 hover:underline"> Register here</span></Link>
-        <button type="submit" className="bg-[#0d1b2a] text-white p-2 rounded cursor-pointer hover:bg-gray-700 mb-4">Login</button>
+        <Link to="/register" className=" mb-4 ml-2 text-gray-700">Don't have an account?<span className="text-blue-500 hover:underline"> Sign up here</span></Link>
+        <button type="submit" className="bg-[#0d1b2a] text-white p-2 rounded cursor-pointer hover:bg-gray-700 mb-4">Submit</button>
+    
+      </form>
+
+     <div>
+      <div className="flex items-center justify-center my-4">
+        <hr className="flex-grow border-gray-300" />
+        <span className="mx-2 text-gray-500">Or</span>
+        <hr className="flex-grow border-gray-300" />
+      </div>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <GoogleLogin
             onSuccess={handleGoogleSignIn}
@@ -125,7 +133,8 @@ const Login = () => {
             className="mt-4"
           />
         </GoogleOAuthProvider>
-      </form>
+     </div>
+     
     </div>
   );
 };

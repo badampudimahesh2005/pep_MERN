@@ -1,14 +1,17 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Login from './components/Login'
-import Register from './components/Register'
-import AppLayout from './layout/AppLayout'
-import Dashboard from './pages/Dashboard'
 import {  useEffect } from 'react'
 import axios from 'axios'
+
+
+import Login from './pages/Login'
+import Register from './pages/Register'
+import AppLayout from './layout/AppLayout'
+import Dashboard from './pages/Dashboard'
 
 import {useDispatch, useSelector} from 'react-redux'
 import { setUser } from './store/slices/userSlice'
 import SERVER_URL from './utils'
+import Home from './pages/Home'
 
 const App = () => {
 
@@ -25,7 +28,6 @@ const App = () => {
         dispatch(setUser(response.data.userDetails));
       }
     } catch (error) {
-      console.error('Error checking user login status:', error);
       dispatch(setUser(null));
     }
   };
@@ -37,7 +39,12 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<AppLayout> <h1 className="text-2xl text-center mt-10">Welcome to the Home Page</h1> </AppLayout>} />
+
+      <Route path="/" element={
+        <AppLayout> 
+          <Home /> 
+        </AppLayout>
+      } />
 
       <Route path="/login" element={
         userDetails 
@@ -47,11 +54,19 @@ const App = () => {
           </AppLayout>
         } />
 
-      <Route path="/register" element={userDetails? <Navigate to='/dashboard' /> : <AppLayout> <Register /> </AppLayout>} />
+      <Route path="/register" element={
+        userDetails
+        ? <Navigate to='/dashboard' /> 
+        : <AppLayout> 
+          <Register /> 
+        </AppLayout>
+      } />
 
       <Route path='/dashboard' element={
         userDetails
-        ? <AppLayout> <Dashboard /> </AppLayout>
+        ? <AppLayout> 
+          <Dashboard /> 
+        </AppLayout>
         : <Navigate to='/login' />
       } />
       

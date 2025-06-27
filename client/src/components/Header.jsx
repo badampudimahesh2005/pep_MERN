@@ -4,47 +4,31 @@ import { Link, useNavigate } from "react-router-dom"
 import SERVER_URL from "../utils";
 
 import { clearUser } from "../store/slices/userSlice";
+import Dropdown from "./Dropdown";
 
 
 
 const Header = () => {
 
   const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-  const handleLogin = async () => {
-    try {
-    const response = await axios.post(`${SERVER_URL}/auth/logout`, {}, { withCredentials: true });
-    console.log("Logout successful", response.data);
-    dispatch(clearUser());
-    navigate("/");
-    
-    } catch (error) {
-      console.error("Logout failed", error);
-    } 
-  }
-
 
   return (
     <>
 
     <nav className="bg-white p-4 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="text-pink-500 text-lg font-bold">
-          <Link to="/" >E-Commerce</Link>
+      <div className="container flex justify-between items-center px-5 mx-auto">
+        <div className="text-[#0d1b2a]/90 text-lg font-bold">
+          <Link to="/" >Affiliate</Link>
         </div>
-        <div className="space-x-4">
+        <div className="space-x-5">
 
           {user ?
-            <>
-              <Link to="/dashboard" className="text-gray-700 hover:text-pink-500">Dashboard</Link>
-              <button onClick={handleLogin} className="text-gray-700 hover:text-pink-500">Logout</button>
-            </>
+              <Dropdown />
+
           :(
             <>
-              <Link to="/login" className="text-gray-700 hover:text-pink-500">Login</Link>
-              <Link to="/register" className="text-gray-700 hover:text-pink-500">Register</Link>
+              <Link to="/login" className="text-gray-700 hover:text-[#0d1b2a]">Login</Link>
+              <Link to="/register" className="text-gray-700 hover:text-[#0d1b2a]">Register</Link>
             </>
           )}
           

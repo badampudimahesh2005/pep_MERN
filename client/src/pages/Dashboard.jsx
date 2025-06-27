@@ -1,7 +1,9 @@
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div className="text-center py-4">
+      <div>User Dashboard</div>
+    </div>
   )
 }
 
