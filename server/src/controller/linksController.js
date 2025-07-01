@@ -97,7 +97,7 @@ const updateLink = async (req, res)=>{
             });
         }
 
-        if(link.user.toString() !== req.user._id.toString()) {
+        if(link.user.toString() !== req.user.id.toString()) {
             return res.status(403).json({
                 message: 'Unauthorized access',
             });
@@ -143,7 +143,7 @@ const deleteLink = async (req, res) => {
             });
         }
 
-        if(link.user.toString() !== req.user._id.toString()) {
+        if(link.user.toString() !== req.user.id.toString()) {
             return res.status(403).json({
                 message: 'Unauthorized access',
             });

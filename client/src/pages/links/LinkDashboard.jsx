@@ -13,18 +13,64 @@ const LinkDashboard = () => {
   const [error, setError] = useState({});
   const [linkData, setLinkData] = useState([]);
 
-  const [formData, setFormData] = useState({});
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [formData, setFormData] = useState({
+    campaignTitle: '',
+    originalUrl: '',
+    category: ''
+  });
+  const [showModal, setShowModal] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
-  const handleAddModalShow = () => {
+  const handleModalShow = (isEdit, data = {}) => {
+    if(isEdit) {
+      setFormData({
+        id: data._id,
+        campaignTitle: data.campaignTitle,
+        originalUrl: data.originalUrl,
+        category: data.category
+      });
+    }else {
+      setFormData({
+        campaignTitle: '',
+        originalUrl: '',
+        category: ''
+      });
+    }
 
-    setShowAddModal(true);
-    setError({});
+    setIsEdit(isEdit);
+    setShowModal(true);
   }
 
-  const handleAddModalClose = () => {
-    setShowAddModal(false);
+  const handleModalClose = () => {
+    setShowModal(false);
   }
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleDeleteModalShow = (linkId) => {
+    setFormData({
+      id: linkId
+    });
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteModalClose = () => {
+    setShowDeleteModal(false);
+  };
+
+  const handleDeleteSubmit = async (e) => {
+    try {
+
+      await axios.delete(`${SERVER_URL}/links/${formData.id}`, { withCredentials: true });
+      fetchLinks();
+    } catch (err) {
+      setError({message: 'Unable to delete link. Please try again later.'});
+    } finally {
+      handleDeleteModalClose();
+    }
+  }
+
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,12 +117,21 @@ const LinkDashboard = () => {
       };
 
       try {
-        const response = await axios.post(`${SERVER_URL}/links/create`, body, config);
-        fetchLinks(); 
+        if(isEdit) {
+          await axios.put(`${SERVER_URL}/links/${formData.id}`, body, config);
+        } else {
+           await axios.post(`${SERVER_URL}/links/create`, body, config);
+          }
+          setFormData({
+            campaignTitle:'',
+            originalUrl:'',
+            category:''
+          });
+          fetchLinks();
       }catch (err) {
         setError({message: 'Unable to add link. Please try again later.'});
     }finally {
-      handleAddModalClose();
+      handleModalClose();
     }
   }
   };
@@ -96,17 +151,26 @@ const LinkDashboard = () => {
 
   const columns = [
     { field: 'campaignTitle', headerName: 'Campaign', flex: 2},
-    { field: 'originalUrl', headerName: 'URL', flex: 3},
+    { field: 'originalUrl', headerName: 'URL', flex: 3, renderCell:(params) => (
+      <a
+      href={`${SERVER_URL}/links/r/${params.row._id}`}
+      target='_blank'
+      rel='noopener noreferrer'
+      >
+        {params.row.originalUrl}
+      </a>
+    )
+  },
     { field: 'category', headerName: 'Category', flex: 2},
     { field: 'clickCount', headerName: 'Clicks', flex: 1},
     { field: 'action', headerName: 'Action', flex: 1, renderCell: (params) => (
       <>
       <IconButton>
-        <EditIcon />
+        <EditIcon onClick={() => handleModalShow(true, params.row)} />
       </IconButton>
 
       <IconButton>
-        <DeleteIcon />
+        <DeleteIcon onClick={() => handleDeleteModalShow(params.row._id)} />
       </IconButton>
       </>
     )
@@ -116,8 +180,8 @@ const LinkDashboard = () => {
     <div className='container mx-auto py-4'>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Affiliate Links</h1>
-        <button 
-          onClick={handleAddModalShow} 
+        <button
+          onClick={() => { handleModalShow(false) }}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           Add Link
@@ -186,25 +250,25 @@ const LinkDashboard = () => {
                 Add Link
               </button>
             </form>
-            <button onClick={handleAddModalClose} className="mt-4 text-red-500 hover:underline">Cancel</button>
+            <button onClick={handleModalClose} className="mt-4 text-red-500 hover:underline">Cancel</button>
 
           </div>
         </div>
       )} */}
 
-   {showAddModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 *:**:not-[data-modal] bg-opacity-50 overflow-y-auto px-4 sm:px-6" onClick={handleAddModalClose}>
+   {showModal && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 *:**:not-[data-modal] bg-opacity-50 overflow-y-auto px-4 sm:px-6" onClick={handleModalClose}>
     <div className="relative mx-auto my-8 w-full max-w-md sm:max-w-lg lg:max-w-xl bg-white rounded-lg shadow-lg p-6"  onClick={(e) => e.stopPropagation()}>
       {/* Close Button */}
       <button
-        onClick={handleAddModalClose}
+        onClick={handleModalClose}
         className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none"
       >
         <span className="text-xl">&times;</span>
       </button>
 
       {/* Modal Title */}
-      <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">Add Link</h2>
+      <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800">{isEdit ? 'Edit Link' : 'Add Link'}</h2>
 
       {/* Form */}
       <form onSubmit={handleSubmit}>
@@ -278,6 +342,57 @@ const LinkDashboard = () => {
           </button>
         </div>
       </form>
+    </div>
+  </div>
+)}
+
+   {showDeleteModal && (
+  <div 
+    className="fixed inset-0 z-50 flex items-center justify-center bg-transparent overflow-y-auto px-4 sm:px-6" 
+    onClick={handleDeleteModalClose}
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="delete-modal-title"
+  >
+    <div 
+      className="relative mx-auto my-8 w-full max-w-md bg-white rounded-lg shadow-xl p-6"  
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Close Button */}
+      <button
+        onClick={handleDeleteModalClose}
+        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-full p-1"
+        aria-label="Close modal"
+      >
+        <span className="text-xl">&times;</span>
+      </button>
+
+      {/* Modal Content */}
+      <div className="pr-8">
+        <h2 id="delete-modal-title" className="text-lg font-semibold mb-4 text-gray-900">
+          Confirm Delete
+        </h2>
+        
+        <p className="text-gray-600 mb-6">
+          Are you sure you want to delete this link? This action cannot be undone.
+        </p>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <button
+            onClick={handleDeleteModalClose}
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleDeleteSubmit}
+            className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 )}
