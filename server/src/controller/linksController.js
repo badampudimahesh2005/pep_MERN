@@ -2,13 +2,14 @@ const Links = require('../models/linksModel');
 
 
 const createLink = async (req, res) => {
-    const {campaign_title, orginal_url, category} = req.body;
+    
+    const {campaignTitle, originalUrl, category} = req.body;
     try {
         const link = new Links({
-            campaignTitle :campaign_title,
-            orginalUrl : orginal_url,
+            campaignTitle :campaignTitle,
+            originalUrl : originalUrl,
             category : category,
-            user: req.user._id
+            user: req.user.id
         });
 
         await link.save();
@@ -28,7 +29,7 @@ const createLink = async (req, res) => {
 const getLinks = async (req, res) => {
     try {
 
-        const links = await Links.find({user: req.user._id}).sort({createdAt: -1});
+        const links = await Links.find({user: req.user.id}).sort({createdAt: -1});
 
 
        res.status(200).json({
@@ -104,11 +105,11 @@ const updateLink = async (req, res)=>{
 
 
 
-        const {campaign_title, orginal_url, category} = req.body;
+        const {campaignTitle, originalUrl, category} = req.body;
 
         link = await Links.findByIdAndUpdate(id, {
-            campaignTitle: campaign_title,
-            orginalUrl: orginal_url,
+            campaignTitle: campaignTitle,
+            orginalUrl: originalUrl,
             category: category,
         }, {new: true});
 

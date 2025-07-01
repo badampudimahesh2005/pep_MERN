@@ -8,7 +8,7 @@ const linkSchema = new mongoose.Schema({
         required: true,
     },
 
-    orginalUrl: {
+    originalUrl: {
         type: String,
         required: true,
     },

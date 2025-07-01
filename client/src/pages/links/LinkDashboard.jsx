@@ -17,7 +17,9 @@ const LinkDashboard = () => {
   const [showAddModal, setShowAddModal] = useState(false);
 
   const handleAddModalShow = () => {
+
     setShowAddModal(true);
+    setError({});
   }
 
   const handleAddModalClose = () => {
@@ -69,7 +71,7 @@ const LinkDashboard = () => {
       };
 
       try {
-        const response = await axios.post(`${SERVER_URL}/links`, body, config);
+        const response = await axios.post(`${SERVER_URL}/links/create`, body, config);
         fetchLinks(); 
       }catch (err) {
         setError({message: 'Unable to add link. Please try again later.'});
@@ -191,8 +193,8 @@ const LinkDashboard = () => {
       )} */}
 
    {showAddModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 *:**:not-[data-modal] bg-opacity-50 overflow-y-auto px-4 sm:px-6">
-    <div className="relative mx-auto my-8 w-full max-w-md sm:max-w-lg lg:max-w-xl bg-white rounded-lg shadow-lg p-6">
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 *:**:not-[data-modal] bg-opacity-50 overflow-y-auto px-4 sm:px-6" onClick={handleAddModalClose}>
+    <div className="relative mx-auto my-8 w-full max-w-md sm:max-w-lg lg:max-w-xl bg-white rounded-lg shadow-lg p-6"  onClick={(e) => e.stopPropagation()}>
       {/* Close Button */}
       <button
         onClick={handleAddModalClose}
@@ -270,7 +272,7 @@ const LinkDashboard = () => {
         <div className="mt-6">
           <button
             type="submit"
-            className=" rounded bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className=" w-full rounded bg-[#0d1b2a] px-4 py-2 text-white hover:bg-[#1b2631] focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             Submit
           </button>
