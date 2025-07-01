@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import {  useEffect } from 'react'
+import {  useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import AppLayout from './layout/AppLayout'
 import Dashboard from './pages/Dashboard'
+import Spinner from './components/Spinner'
 
 import {useDispatch, useSelector} from 'react-redux'
 import { setUser } from './store/slices/userSlice'
@@ -18,6 +19,7 @@ const App = () => {
   const userDetails = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(true);
 
 
   // Check if user is logged in by making an API call
@@ -29,6 +31,8 @@ const App = () => {
       }
     } catch (error) {
       dispatch(setUser(null));
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -36,6 +40,10 @@ const App = () => {
   useEffect(() => {
     checkUserLoggedIn();
   }, []);
+
+  if (loading) {
+    return <Spinner />;
+  } 
 
   return (
     <Routes>
