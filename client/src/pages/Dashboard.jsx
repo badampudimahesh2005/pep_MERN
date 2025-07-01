@@ -1,9 +1,10 @@
 
+import LinkDashboard from './links/LinkDashboard';
 const Dashboard = () => {
   return (
-    <div className="text-center py-4">
-      <div>User Dashboard</div>
-    </div>
+   <>
+   <LinkDashboard />
+   </>
   )
 }
 
