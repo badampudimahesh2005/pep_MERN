@@ -183,13 +183,13 @@ const LinkDashboard = () => {
         <h1 className="text-2xl font-bold">Affiliate Links</h1>
         <button
           onClick={() => { handleModalShow(false) }}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer"
         >
           Add Link
         </button>
       </div>
 
-      {error.message && <div className="error">{error.message}</div>}
+      {error.message && <div className="text-red-500 text-center">{error.message}</div>}
       <div style={{ height: 400, width: '90%', margin: '0 auto' }}>
         <DataGrid
           getRowId={(row) => row._id}
@@ -265,7 +265,7 @@ const LinkDashboard = () => {
         onClick={handleModalClose}
         className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none"
       >
-        <span className="text-xl">&times;</span>
+        <span className="text-2xl">&times;</span>
       </button>
 
       {/* Modal Title */}
@@ -349,7 +349,7 @@ const LinkDashboard = () => {
 
    {showDeleteModal && (
   <div 
-    className="fixed inset-0 z-50 flex items-center justify-center bg-transparent overflow-y-auto px-4 sm:px-6" 
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-y-auto px-4 sm:px-6" 
     onClick={handleDeleteModalClose}
     role="dialog"
     aria-modal="true"

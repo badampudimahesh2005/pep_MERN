@@ -3,11 +3,19 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { EllipsisVertical } from "lucide-react";
 import { useSelector } from "react-redux";
+import SERVER_URL from "../../utils";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { clearUser } from "../../store/slices/userSlice";
+import { useNavigate } from "react-router-dom";
+
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef();
   const userDetails = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -19,6 +27,16 @@ const UserDropdown = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(`${SERVER_URL}/auth/logout`, {}, { withCredentials: true });
+      console.log("Logout successful", response.data);
+      dispatch(clearUser());
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -32,12 +50,12 @@ const UserDropdown = () => {
       {isOpen && (
         <ul className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg ring-1 ring-black/10 text-sm text-gray-700 z-50">
           <li>
-            <Link
-              to="/logout"
+            <button
+              onClick={handleLogout}
               className="block px-4 py-2 hover:bg-gray-100"
             >
               Logout
-            </Link>
+            </button>
           </li>
         </ul>
       )}
