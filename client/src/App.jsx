@@ -8,11 +8,13 @@ import Register from './pages/Register'
 import AppLayout from './layout/AppLayout'
 import Dashboard from './pages/Dashboard'
 import Spinner from './components/Spinner'
+import ManageUsers from './pages/users/ManageUsers'
 
 import {useDispatch, useSelector} from 'react-redux'
 import { setUser } from './store/slices/userSlice'
 import SERVER_URL from './utils'
 import Home from './pages/Home'
+import UserLayout from './layout/UserLayout'
 
 const App = () => {
 
@@ -68,6 +70,14 @@ const App = () => {
         : <AppLayout> 
           <Register /> 
         </AppLayout>
+      } />
+
+      <Route path='/users' element={
+        userDetails
+        ? <UserLayout>
+          <ManageUsers />
+        </UserLayout>
+        : <Navigate to='/login' />
       } />
 
       <Route path='/dashboard' element={
