@@ -9,7 +9,7 @@ const createLink = async (req, res) => {
             campaignTitle :campaignTitle,
             originalUrl : originalUrl,
             category : category,
-            user: req.user.id
+            user: req.user.role === 'admin' ? req.user.id: req.user.adminId, // Allow admin to create links for other users
         });
 
         await link.save();
@@ -29,7 +29,9 @@ const createLink = async (req, res) => {
 const getLinks = async (req, res) => {
     try {
 
-        const links = await Links.find({user: req.user.id}).sort({createdAt: -1});
+        const userId = req.user.role === 'admin' ? req.user.id : req.user.adminId;
+
+        const links = await Links.find({user: userId}).sort({createdAt: -1});
 
 
        res.status(200).json({
@@ -48,6 +50,7 @@ const getLinks = async (req, res) => {
 
 const getLinkById = async (req, res) => {
     try {
+        const userId = req.user.role === 'admin' ? req.user.id : req.user.adminId;
         const {id} = req.params;
         if (!id) {
             return res.status(400).json({
@@ -61,7 +64,7 @@ const getLinkById = async (req, res) => {
             });
         }
         
-       if( link.user.toString() !== req.user._id.toString()) {
+       if( link.user.toString() !== userId) {
             return res.status(403).json({
                 message: 'Unauthorized access ',
             });
@@ -83,6 +86,7 @@ const getLinkById = async (req, res) => {
 
 const updateLink = async (req, res)=>{
     try{
+        const userId = req.user.role === 'admin' ? req.user.id : req.user.adminId;
         const {id} = req.params;
         if (!id) {
             return res.status(400).json({
@@ -97,7 +101,7 @@ const updateLink = async (req, res)=>{
             });
         }
 
-        if(link.user.toString() !== req.user.id.toString()) {
+        if(link.user.toString() !== userId) {
             return res.status(403).json({
                 message: 'Unauthorized access',
             });
@@ -129,6 +133,7 @@ const updateLink = async (req, res)=>{
 
 const deleteLink = async (req, res) => {
     try {
+        const userId = req.user.role === 'admin' ? req.user.id : req.user.adminId;
         const {id} = req.params;
         if (!id) {
             return res.status(400).json({
@@ -143,7 +148,7 @@ const deleteLink = async (req, res) => {
             });
         }
 
-        if(link.user.toString() !== req.user.id.toString()) {
+        if(link.user.toString() !== userId) {
             return res.status(403).json({
                 message: 'Unauthorized access',
             });
@@ -166,6 +171,7 @@ const deleteLink = async (req, res) => {
 
 const redirectLink = async (req, res) => {
     try {
+        const userId = req.user.role === 'admin' ? req.user.id : req.ser.adminId;
         const {id} = req.params;
         if (!id) {
             return res.status(400).json({
@@ -180,7 +186,7 @@ const redirectLink = async (req, res) => {
             });
         }
 
-        if(link.user.toString() !== req.user.id.toString()) {
+        if(link.user.toString() !== userId) {
             return res.status(403).json({
                 message: 'Unauthorized access',
             });

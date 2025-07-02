@@ -178,7 +178,8 @@ const LinkDashboard = () => {
   ]
   return (
     <div className='container mx-auto py-4'>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 mx-10">
+        <div></div>
         <h1 className="text-2xl font-bold">Affiliate Links</h1>
         <button
           onClick={() => { handleModalShow(false) }}
@@ -189,7 +190,7 @@ const LinkDashboard = () => {
       </div>
 
       {error.message && <div className="error">{error.message}</div>}
-      <div style={{ height: 400, width: '100%' }}>
+      <div style={{ height: 400, width: '90%', margin: '0 auto' }}>
         <DataGrid
           getRowId={(row) => row._id}
           rows={linkData}

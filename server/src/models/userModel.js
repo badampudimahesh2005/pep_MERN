@@ -24,6 +24,15 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    role: {
+        type: String,
+       default: 'admin',
+    },
+    adminId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        index: true,
+    },
 
 });
 

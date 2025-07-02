@@ -29,6 +29,7 @@ const login = async (req, res) => {
       id: user._id,
       username: user.username,
       email: user.email,
+      role: user.role ? user.role : 'admin'
     };
 
     const token = jwt.sign(userDetails, JWT_SECRET, { expiresIn: "1h" });
@@ -71,6 +72,7 @@ const signup = async (req, res) => {
         username: username,
         email: email,
         password: hashedPassword,
+        role: "admin", // Default role, can be changed later
         });
 
     await newUser.save();
@@ -79,6 +81,7 @@ const signup = async (req, res) => {
       id: newUser._id,
       username: newUser.username,
       email: newUser.email,
+      role: newUser.role ? newUser.role : 'admin'
     };
 
     const token = jwt.sign(userDetails, JWT_SECRET, { expiresIn: "1h" });
@@ -123,6 +126,8 @@ const googleAuth = async (req, res) => {
       email: email,
       username: name,
       isGoogleUser: true,
+      googleId: googleId,
+      role: user.role ? user.role : 'admin',
     });
     await user.save();
   }
