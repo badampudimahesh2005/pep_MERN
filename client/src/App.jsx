@@ -16,6 +16,10 @@ import SERVER_URL from './utils'
 import Home from './pages/Home'
 import UserLayout from './layout/UserLayout'
 
+import ProtectedRoute from './rbac/ProtectedRoute'
+import UnauthorizedAccess from './components/UnauthorizedAccess'
+
+
 const App = () => {
 
   const userDetails = useSelector((state) => state.user);
@@ -74,17 +78,27 @@ const App = () => {
 
       <Route path='/users' element={
         userDetails
+        ? <ProtectedRoute roles={['admin']}>
+          <UserLayout>
+            <ManageUsers />
+          </UserLayout>
+        </ProtectedRoute>
+        : <Navigate to='/login' />
+      } />
+
+      <Route path='/unauthorized' element={
+        userDetails
         ? <UserLayout>
-          <ManageUsers />
+          <UnauthorizedAccess />
         </UserLayout>
         : <Navigate to='/login' />
       } />
 
       <Route path='/dashboard' element={
         userDetails
-        ? <AppLayout> 
+        ? <UserLayout> 
           <Dashboard /> 
-        </AppLayout>
+        </UserLayout>
         : <Navigate to='/login' />
       } />
       

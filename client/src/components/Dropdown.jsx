@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { clearUser } from '../store/slices/userSlice';
-import { ChevronDown, EllipsisVertical } from 'lucide-react';
+import {  EllipsisVertical } from 'lucide-react';
 
 
 export default function Dropdown() {
@@ -63,6 +63,7 @@ export default function Dropdown() {
             <li>
               <button onClick={handleLogout} className="w-full text-left px-4 py-2 hover:bg-gray-100">Sign out</button>
             </li>
+             
           </ul>
         </div>
       )}

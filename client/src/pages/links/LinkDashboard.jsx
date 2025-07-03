@@ -6,6 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import SERVER_URL from '../../utils';
 import { useEffect, useState } from 'react';
+import { usePermissions } from '../../rbac/Permissions';
 
 
 const LinkDashboard = () => {
@@ -20,6 +21,8 @@ const LinkDashboard = () => {
   });
   const [showModal, setShowModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+
+  const permissions = usePermissions();
 
   const handleModalShow = (isEdit, data = {}) => {
     if(isEdit) {
@@ -165,13 +168,17 @@ const LinkDashboard = () => {
     { field: 'clickCount', headerName: 'Clicks', flex: 1},
     { field: 'action', headerName: 'Action', flex: 1, renderCell: (params) => (
       <>
-      <IconButton>
-        <EditIcon onClick={() => handleModalShow(true, params.row)} />
-      </IconButton>
+        {permissions.canEditLink && (
+          <IconButton>
+            <EditIcon onClick={() => handleModalShow(true, params.row)} />
+          </IconButton>
+        )}
 
-      <IconButton>
-        <DeleteIcon onClick={() => handleDeleteModalShow(params.row._id)} />
-      </IconButton>
+        {permissions.canDeleteLink && (
+          <IconButton>
+            <DeleteIcon onClick={() => handleDeleteModalShow(params.row._id)} />
+          </IconButton>
+        )}
       </>
     )
     }
@@ -181,12 +188,15 @@ const LinkDashboard = () => {
       <div className="flex justify-between items-center mb-4 mx-10">
         <div></div>
         <h1 className="text-2xl font-bold">Affiliate Links</h1>
-        <button
-          onClick={() => { handleModalShow(false) }}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer"
-        >
-          Add Link
-        </button>
+
+        {permissions.canCreateLink && (
+          <button
+            onClick={() => { handleModalShow(false) }}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer"
+          >
+            Add Link
+          </button>
+        )}
       </div>
 
       {error.message && <div className="text-red-500 text-center">{error.message}</div>}

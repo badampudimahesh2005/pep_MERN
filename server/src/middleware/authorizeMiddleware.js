@@ -9,11 +9,10 @@ const authorize = (requiredPermission) => {
         }
 
        const hasPermission = permissions[user.role] || [];
-       if (hasPermission.includes(requiredPermission)) {
-           return next();
-       } else {
+       if (!hasPermission.includes(requiredPermission)) {
            return res.status(403).json({ message: 'Forbidden: Insufficient permissions', requiredPermission });
        }
+       next();
     };
 };
 

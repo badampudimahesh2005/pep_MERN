@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { clearUser } from "../../store/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import Can from "../../rbac/Can";
 
 
 const UserDropdown = () => {
@@ -16,6 +17,8 @@ const UserDropdown = () => {
   const userDetails = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  console.log("User Details:", userDetails);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -26,6 +29,7 @@ const UserDropdown = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
 
   const handleLogout = async () => {
     try {
@@ -57,6 +61,13 @@ const UserDropdown = () => {
               Logout
             </button>
           </li>
+          <Can permission='canViewUser'>
+            <li>
+              <Link to='/users' className="block px-4 py-2 hover:bg-gray-100">
+              Manage Users
+              </Link>
+            </li>
+          </Can>
         </ul>
       )}
     </div>

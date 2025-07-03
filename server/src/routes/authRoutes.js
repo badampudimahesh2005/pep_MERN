@@ -37,7 +37,8 @@ router.get('/check', isUserLoggedIn, (req, res) => {
         isLoggedIn: true,
         userDetails: {
             username: req.user.username,
-            email: req.user.email
+            email: req.user.email,
+            role: req.user.role,
         }
     });
 });
