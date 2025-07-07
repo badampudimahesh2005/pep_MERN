@@ -1,10 +1,19 @@
 const Links = require('../models/linksModel');
+const User = require('../models/userModel');
 
 
 const createLink = async (req, res) => {
     
     const {campaignTitle, originalUrl, category} = req.body;
     try {
+
+        const user = await User.findById({_id: req.user.id});
+        if(user.credits < 1) {
+            return res.status(400).json({
+                message: 'Insufficient credits. Please purchase credits to create links.',
+            });
+        }
+
         const link = new Links({
             campaignTitle :campaignTitle,
             originalUrl : originalUrl,
@@ -13,6 +22,12 @@ const createLink = async (req, res) => {
         });
 
         await link.save();
+
+        // Deduct credits from user
+        user.credits -= 1; // Deduct 1 credit for creating a link
+        await user.save();
+
+        
         res.status(201).json({
             message: 'Link created successfully',
             data: {id: link._id},

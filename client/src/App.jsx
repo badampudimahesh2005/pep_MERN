@@ -9,6 +9,7 @@ import AppLayout from './layout/AppLayout'
 import Dashboard from './pages/Dashboard'
 import Spinner from './components/Spinner'
 import ManageUsers from './pages/users/ManageUsers'
+import ManagePayments from './pages/payments/ManagePayments'
 
 import {useDispatch, useSelector} from 'react-redux'
 import { setUser } from './store/slices/userSlice'
@@ -98,6 +99,14 @@ const App = () => {
         userDetails
         ? <UserLayout> 
           <Dashboard /> 
+        </UserLayout>
+        : <Navigate to='/login' />
+      } />
+
+      <Route path='/manage-payment' element={
+        userDetails
+        ? <UserLayout>
+          <ManagePayments />
         </UserLayout>
         : <Navigate to='/login' />
       } />

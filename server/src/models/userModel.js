@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
         ref: 'User',
         index: true,
     },
+    credits : {
+        type: Number,
+        default: 0,
+    }
 
 });
 

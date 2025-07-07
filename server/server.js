@@ -8,6 +8,7 @@ const connectDB = require('./src/config/mongodb');
 const authRoutes = require('./src/routes/authRoutes');
 const linkRoutes = require('./src/routes/linksRoutes');
 const userRoutes = require('./src/routes/userRoutes');
+const paymentRoutes = require('./src/routes/paymentRoutes');
 
 
 const app = express();
@@ -31,6 +32,7 @@ connectDB()
 app.use('/auth', authRoutes);
 app.use('/links', linkRoutes);
 app.use('/users' ,userRoutes);
+app.use('/payments', paymentRoutes);
 
 
 app.listen(port, () => {
