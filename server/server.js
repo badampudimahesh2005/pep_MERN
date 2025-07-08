@@ -15,7 +15,16 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 
-app.use(express.json());
+// app.use(express.json());
+//we want to skip applying json middleware to webhooks endpoint
+app.use((req, res, next) => {
+    if(req.originalUrl.startsWith('/payments/webhook')) {
+       return  next();
+    }
+    express.json()(req, res, next);
+});
+
+
 app.use(cookieParser());
 
 app.use(cors({

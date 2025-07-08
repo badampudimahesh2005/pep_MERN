@@ -1,6 +1,17 @@
 const mongoose = require('mongoose');
 
 
+const subscriptionSchema = new mongoose.Schema({
+
+    id: {type: String},//razorpay subscription id
+    status: {type: String, default: 'pending'},
+    start: {type: Date },
+    end: {type: Date },
+    lastBillDate: {type: Date },
+    nextBillDate: {type: Date },
+    paymentsMade: {type: Number },
+    paymentsRemaining: {type: Number },
+});
 const userSchema = new mongoose.Schema({
 
     username: {
@@ -36,7 +47,12 @@ const userSchema = new mongoose.Schema({
     credits : {
         type: Number,
         default: 0,
-    }
+    },
+    subscription: {
+        type: subscriptionSchema,
+        default: null,
+    },
+
 
 });
 
