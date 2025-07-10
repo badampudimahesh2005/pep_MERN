@@ -276,12 +276,15 @@ const analytics = async (req, res) => {
         const userId = req.user.role === 'admin' 
             ? req.user.id 
             : req.user.adminId;
+
+            console.log('User ID:', userId, 'Link User ID:', link.user);
         
-        if (link.user.toString() !== userId) {
+        if (link.user.toString() !== userId.toString()) {
             return res.status(403).json({
                 message: 'Unauthorized access',
             });
         }
+
 
         const query = { linkId: linkId};
 

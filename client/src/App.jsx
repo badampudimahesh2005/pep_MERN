@@ -19,6 +19,7 @@ import UserLayout from './layout/UserLayout'
 
 import ProtectedRoute from './rbac/ProtectedRoute'
 import UnauthorizedAccess from './components/UnauthorizedAccess'
+import AnalyticsDashboard from './pages/links/AnalyticsDashboard'
 
 
 const App = () => {
@@ -107,6 +108,14 @@ const App = () => {
         userDetails
         ? <UserLayout>
           <ManagePayments />
+        </UserLayout>
+        : <Navigate to='/login' />
+      } />
+
+      <Route path='/analytics/:linkId' element={
+        userDetails
+        ? <UserLayout>
+          <AnalyticsDashboard />
         </UserLayout>
         : <Navigate to='/login' />
       } />
