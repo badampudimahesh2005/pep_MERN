@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import AppLayout from './layout/AppLayout'
 import Dashboard from './pages/Dashboard'
+import Error from './pages/Error'
 import Spinner from './components/Spinner'
 import ManageUsers from './pages/users/ManageUsers'
 import ManagePayments from './pages/payments/ManagePayments'
@@ -119,6 +120,13 @@ const App = () => {
         </UserLayout>
         : <Navigate to='/login' />
       } />
+
+      <Route path="/error" element={userDetails ?
+        <UserLayout>
+          <Error />
+        </UserLayout> :
+        <AppLayout><Error /></AppLayout>
+      } />
       
       <Route path="*" element={<AppLayout> <h1 className="text-2xl text-center mt-10">404 Not Found</h1> </AppLayout>} />
     </Routes>
@@ -126,3 +134,6 @@ const App = () => {
 }
 
 export default App
+
+
+
