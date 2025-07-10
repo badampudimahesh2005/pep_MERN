@@ -1,15 +1,22 @@
 
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import SERVER_URL from '../../utils';
 import { useEffect, useState } from 'react';
 import { usePermissions } from '../../rbac/Permissions';
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 
 const LinkDashboard = () => {
+
+  const navigate = useNavigate();
 
   const [error, setError] = useState({});
   const [linkData, setLinkData] = useState([]);
@@ -177,6 +184,12 @@ const LinkDashboard = () => {
         {permissions.canDeleteLink && (
           <IconButton>
             <DeleteIcon onClick={() => handleDeleteModalShow(params.row._id)} />
+          </IconButton>
+        )}
+
+        {permissions.canViewLink && (
+          <IconButton>
+            <AssessmentIcon onClick={() => navigate(`/analytics/${params.row._id}`)} />
           </IconButton>
         )}
       </>
