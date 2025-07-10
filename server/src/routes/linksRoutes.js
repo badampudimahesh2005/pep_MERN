@@ -10,9 +10,13 @@ const {
     updateLink,
     deleteLink,
     redirectLink,
+    analytics
 } = require('../controller/linksController');
 
 router.use(isUserLoggedIn);
+
+// Analytics route
+router.get('/analytics', authorize('link:read'), analytics);
 
 //get all links 
 router.get('/',authorize('link:read'), getLinks);

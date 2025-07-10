@@ -1,5 +1,8 @@
+const { default: axios } = require('axios');
 const Links = require('../models/linksModel');
 const User = require('../models/userModel');
+const Click = require('../models/Clicks');
+const { getDeviceInfo } = require('../utils/linksUtility');
 
 
 const createLink = async (req, res) => {
@@ -186,7 +189,8 @@ const deleteLink = async (req, res) => {
 
 const redirectLink = async (req, res) => {
     try {
-        const userId = req.user.role === 'admin' ? req.user.id : req.ser.adminId;
+        const userId = req.user.role === 'admin' ? req.user.id : req.user.adminId;
+
         const {id} = req.params;
         if (!id) {
             return res.status(400).json({
@@ -201,11 +205,47 @@ const redirectLink = async (req, res) => {
             });
         }
 
-        if(link.user.toString() !== userId) {
+
+        if(link.user.toString() !== userId.toString()) {
             return res.status(403).json({
                 message: 'Unauthorized access',
             });
         }
+
+
+        const isDevelopment = process.env.NODE_ENV === 'development';
+        const ipAddress = isDevelopment
+            ? '8.8.8.8'
+            : req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+
+        // Log the IP address and link ID
+        console.log(`Redirecting link with ID: ${id} from IP: ${ipAddress}`);
+
+        const geoResponse = await axios.get(`http://ip-api.com/json/${ipAddress}`);
+
+        const { city, country, region, lat, lon, isp } = geoResponse;
+
+        const userAgent = req.headers['user-agent'] || 'Unknown';
+        const { deviceType, browser } = getDeviceInfo(userAgent);
+
+        const referrer = req.get('Referrer') || null;
+
+        // Create a click record
+        await Click.create({
+            linkId: link._id,
+            ip: ipAddress,
+            city: city,
+            country: country,
+            region: region,
+            latitude: lat,
+            longitude: lon,
+            isp: isp,
+            referrer: referrer,
+            userAgent: userAgent,
+            deviceType: deviceType,
+            browser: browser ,
+            clickedAt: new Date(),
+        });
 
         link.clickCount += 1;
         await link.save();
@@ -221,11 +261,55 @@ const redirectLink = async (req, res) => {
     }
 };
 
+const analytics = async (req, res) => {
+    try {
+
+        const {linkId, from , to} = req.query;
+
+        const link = await Links.findById({_id: linkId});
+        if (!link) {
+            return res.status(404).json({
+                message: 'Link does not exist with this ID',
+            });
+        }
+
+        const userId = req.user.role === 'admin' 
+            ? req.user.id 
+            : req.user.adminId;
+        
+        if (link.user.toString() !== userId) {
+            return res.status(403).json({
+                message: 'Unauthorized access',
+            });
+        }
+
+        const query = { linkId: linkId};
+
+        if (from && to) {
+            query.clickedAt = {
+                $gte: new Date(from),
+                $lte: new Date(to),
+            };
+        }
+        const clicks = await Click.find(query).sort({ clickedAt: -1 });
+
+        res.status(200).json(clicks);
+       
+    } catch (error) {
+        console.error('Error fetching analytics:', error);
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     createLink,
     getLinks,
     getLinkById,
     updateLink,
     deleteLink,
-    redirectLink
+    redirectLink,
+    analytics
 };
