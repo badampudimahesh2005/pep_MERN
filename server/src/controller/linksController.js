@@ -277,7 +277,6 @@ const analytics = async (req, res) => {
             ? req.user.id 
             : req.user.adminId;
 
-            console.log('User ID:', userId, 'Link User ID:', link.user);
         
         if (link.user.toString() !== userId.toString()) {
             return res.status(403).json({

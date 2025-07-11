@@ -35,6 +35,38 @@ try{
 
 }
 
+
+
+const refreshToken = (req, res, next) => {
+    try {
+
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
+        return res.status(401).json({ message: 'Unauthorized access' });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
+
+    const user = User.findById({_id:decoded.id}).select('-password');
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    const newAccessToken = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1m' });
+
+    res.cookie('token', newAccessToken, {
+        httpOnly: true,
+        secure: true,
+        domain: 'localhost',
+    });
+
+    res.status(200).json({ message: 'Token refreshed successfully' });
+} catch (err) {
+    return res.status(403).json({ message: 'Unauthorized access' });
+    }
+}
+
 module.exports = {
-    isUserLoggedIn
-    };
+    isUserLoggedIn,
+    refreshToken
+};

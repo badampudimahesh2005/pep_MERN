@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { login, logout , signup, googleAuth} = require('../controller/authController');
-const { isUserLoggedIn } = require('../middleware/authMiddleware');
+const { isUserLoggedIn, refreshToken } = require('../middleware/authMiddleware');
 
 const {body} = require('express-validator');
 
@@ -42,4 +42,8 @@ router.get('/check', isUserLoggedIn, (req, res) => {
 });
 
 router.post('/google-login', googleAuth);
+
+router.post('/refresh-token', refreshToken);
+
+
 module.exports = router;

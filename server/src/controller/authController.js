@@ -7,6 +7,14 @@ const {validationResult} = require("express-validator");
 
 const JWT_SECRET = process.env.JWT_SECRET ;
 
+const generateAccessToken = (userDetails) => {
+  return jwt.sign(userDetails, JWT_SECRET, { expiresIn: "1m" });
+}
+
+const generateRefreshToken = (userDetails) => {
+  return jwt.sign(userDetails, process.env.JWT_REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+}
+
 const login = async (req, res) => {
   try {
     const {  password, email } = req.body;
@@ -34,8 +42,16 @@ const login = async (req, res) => {
       credits: user.credits ? user.credits : 0,
     };
 
-    const token = jwt.sign(userDetails, JWT_SECRET, { expiresIn: "1h" });
+    const token = generateAccessToken(userDetails);
+    const refreshToken = generateRefreshToken(userDetails);
+
     res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      domain: "localhost",
+      path: "/",
+    });
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: true,
       domain: "localhost",
@@ -87,7 +103,7 @@ const signup = async (req, res) => {
       credits: newUser.credits ? newUser.credits : 0,
     };
 
-    const token = jwt.sign(userDetails, JWT_SECRET, { expiresIn: "1h" });
+    const token = generateAccessToken(userDetails);
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
@@ -142,12 +158,20 @@ const googleAuth = async (req, res) => {
     role: user.role ? user.role : 'admin',
     credits: user.credits ? user.credits : 0,
   };
-  const token = jwt.sign(userDetails, JWT_SECRET, { expiresIn: "1h" });
+  const token = generateAccessToken(userDetails);
+  const refreshToken = generateRefreshToken(userDetails);
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
     domain: "localhost",
   });
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    secure: true,
+    domain: "localhost",
+  });
+
   res.status(200).json({
     message: "Google authentication successful",
     userDetails: userDetails,
@@ -164,6 +188,9 @@ const googleAuth = async (req, res) => {
 const logout = (req, res) => {
   try {
     res.clearCookie("token");
+    res.clearCookie("refreshToken");
+    // Optionally, you can also invalidate the refresh token in your database if you store it
+    // For now, we just clear the cookie
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     res
@@ -171,6 +198,9 @@ const logout = (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
+
+
 
 
 
