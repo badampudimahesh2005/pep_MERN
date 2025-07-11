@@ -31,7 +31,7 @@ const signupValidator = [
 router.post('/login', loginValidator, login);
 router.post('/signup', signupValidator, signup);
 
-router.post('/logout', isUserLoggedIn, logout);
+router.post('/logout', logout);
 router.get('/check', isUserLoggedIn, (req, res) => {
     res.status(200).json({
         isLoggedIn: true,

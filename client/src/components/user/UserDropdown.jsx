@@ -35,10 +35,11 @@ const UserDropdown = () => {
     try {
       const response = await axios.post(`${SERVER_URL}/auth/logout`, {}, { withCredentials: true });
       console.log("Logout successful", response.data);
-      dispatch(clearUser());
-      navigate("/");
     } catch (error) {
       console.error("Logout failed", error);
+    }finally {
+      dispatch(clearUser());
+      navigate("/");
     }
   };
   return (

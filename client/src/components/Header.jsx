@@ -15,9 +15,9 @@ const Header = () => {
   return (
     <>
 
-    <nav className="bg-white p-4 shadow-md">
+    <nav className="bg-[#0d1b2a] p-4 shadow-md">
       <div className="container flex justify-between items-center px-5 mx-auto">
-        <div className="text-[#0d1b2a]/90 text-lg font-bold">
+        <div className="text-white text-lg font-bold">
           <Link to="/" >Affiliate</Link>
         </div>
         <div className="space-x-5">
@@ -27,8 +27,8 @@ const Header = () => {
 
           :(
             <>
-              <Link to="/login" className="text-gray-700 hover:text-[#0d1b2a]">Login</Link>
-              <Link to="/register" className="text-gray-700 hover:text-[#0d1b2a]">Register</Link>
+              <Link to="/login" className="text-white/75 hover:text-white">Login</Link>
+              <Link to="/register" className="text-white/75 hover:text-white">Register</Link>
             </>
           )}
           

@@ -44,10 +44,10 @@ export default function Dropdown() {
     <div className="relative inline-block text-left" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center gap-2 rounded-md bg-white px-2 py-1 text-sm font-medium text-gray-700 shadow ring-1 ring-gray-300/50 hover:bg-gray-50"
+        className="inline-flex items-center gap-2 rounded-md bg-[#432dd7] px-2 py-1 text-sm font-medium text-white shadow hover:bg-[#432dd7]/90 "
       >
         {user ? user.username.split(" ")[0] : 'User'}
-        <span className="text-gray-500/75"><EllipsisVertical /></span>
+        <span className="text-white/75"><EllipsisVertical /></span>
       </button>
 
       {isOpen && (

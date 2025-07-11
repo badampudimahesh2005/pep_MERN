@@ -31,6 +31,18 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
 
+  const attemptToRefreshToken = async () => {
+    try {
+      const response = await axios.post(`${SERVER_URL}/auth/refresh-token`,{}, { withCredentials: true });
+      console.log("Token refreshed successfully:", response.data);
+     
+      dispatch(setUser(response.data.userDetails));
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      dispatch(setUser(null));
+    }
+  };
+
   // Check if user is logged in by making an API call
   const checkUserLoggedIn = async () => {
     try {
@@ -39,7 +51,12 @@ const App = () => {
         dispatch(setUser(response.data.userDetails));
       }
     } catch (error) {
-      dispatch(setUser(null));
+      if(error.response && error.response.status === 401 && error.response.data.tokenExpired) {
+        // If the user is not logged in, try to refresh the token
+        await attemptToRefreshToken();
+      } else {
+        console.error("Error checking user login status:", error);
+      }
     }finally {
       setLoading(false);
     }
