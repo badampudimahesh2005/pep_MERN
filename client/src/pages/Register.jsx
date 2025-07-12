@@ -135,7 +135,16 @@ const Register = () => {
         </div>
        
         {error && <p className='text-red-500 mb-4'>{error}</p>}
-         <Link to="/login" className=" mb-4 text-gray-700 ml-2">Already have an account?<span className="text-blue-500 hover:underline"> Sign In here</span></Link>
+       <div className="inline-block text-gray-700 mb-2">
+        Don't have an account?
+         <Link
+          to="/login"
+          className="text-blue-500 hover:underline ml-2"
+          style={{ width: "fit-content" }}
+        >
+         Sign In here
+        </Link>
+       </div>
         <button type="submit" className='bg-[#0d1b2a] text-white p-2 rounded hover:bg-gray-700 cursor-pointer'>Sign Up</button>
 
       </form>

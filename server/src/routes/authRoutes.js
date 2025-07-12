@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { login, logout , signup, googleAuth} = require('../controller/authController');
+const { login, logout , signup, googleAuth, sendResetPasswordToken, resetPassword} = require('../controller/authController');
 const { isUserLoggedIn, refreshToken } = require('../middleware/authMiddleware');
 
 const {body} = require('express-validator');
@@ -45,5 +45,8 @@ router.post('/google-login', googleAuth);
 
 router.post('/refresh-token', refreshToken);
 
+// Password reset routes
+router.post('/send-reset-token', sendResetPasswordToken);
+router.post('/reset-password', resetPassword);
 
 module.exports = router;

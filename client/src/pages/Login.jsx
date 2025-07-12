@@ -85,47 +85,70 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto mt-10 ">
+    <div className="bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto mt-10">
       <h1 className="text-xl text-center font-bold mb-4 text-[#0d1b2a]">Sign in to Continue</h1>
       <form onSubmit={handleSubmit} className="flex flex-col">
-       
         <label className="block mb-2">Email:</label>
         <input
           type="email"
-          name="email" 
+          name="email"
           value={userData.email}
           onChange={handleChange}
           className="border border-gray-300 p-2 rounded w-full mb-4"
         />
-       <div className="relative mb-4">
-         <label className="block mb-2">Password:</label>
-        <input
-          type={passwordVisible ? "text" : "password"}
-          name="password" 
-          value={userData.password}
-          onChange={handleChange}
-          className="border border-gray-300 p-2 rounded w-full mb-4"
-        />
-        <button
-          type="button"
-          onClick={() => setPasswordVisible(!passwordVisible)}
-          className="absolute inset-y-0 top-7 cursor-pointer right-3 flex items-center text-gray-500"
-        >
-          {passwordVisible ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
-        </button>
-       </div>
+        <div className="relative mb-2">
+          <label className="block mb-2">Password:</label>
+          <input
+            type={passwordVisible ? "text" : "password"}
+            name="password"
+            value={userData.password}
+            onChange={handleChange}
+            className="border border-gray-300 p-2 rounded w-full mb-4"
+          />
+          <button
+            type="button"
+            onClick={() => setPasswordVisible(!passwordVisible)}
+            className="absolute inset-y-0 top-7 right-3 flex items-center text-gray-500 cursor-pointer"
+            style={{ background: "transparent", padding: 0, border: "none" }}
+            tabIndex={-1}
+          >
+            {passwordVisible ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+          </button>
+        </div>
         {error && <p className="text-red-500 mb-4">{error}</p>}
-        <Link to="/register" className=" mb-4 ml-2 text-gray-700">Don't have an account?<span className="text-blue-500 hover:underline"> Sign up here</span></Link>
-        <button type="submit" className="bg-[#0d1b2a] text-white p-2 rounded cursor-pointer hover:bg-gray-700 mb-4">Submit</button>
-    
-      </form>
+        <div className="flex justify-end mb-2">
+          <Link
+            to="/forget-password"
+            className="text-blue-500 hover:underline text-sm"
+          >
+            Forgot Password?
+          </Link>
+        </div>
+        <button
+          type="submit"
+          className="bg-[#0d1b2a] text-white p-2 rounded cursor-pointer hover:bg-gray-700 mb-4"
+        >
+          Submit
+        </button>
+        
+       <div className="inline-block text-gray-700">
+        Don't have an account?
+         <Link
+          to="/register"
+          className="text-blue-500 hover:underline ml-2"
+          style={{ width: "fit-content" }}
+        >
+          Sign up here
+        </Link>
+       </div>
 
-     <div>
-      <div className="flex items-center justify-center my-4">
-        <hr className="flex-grow border-gray-300" />
-        <span className="mx-2 text-gray-500">Or</span>
-        <hr className="flex-grow border-gray-300" />
-      </div>
+      </form>
+      <div>
+        <div className="flex items-center justify-center my-4">
+          <hr className="flex-grow border-gray-300" />
+          <span className="mx-2 text-gray-500">Or</span>
+          <hr className="flex-grow border-gray-300" />
+        </div>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <GoogleLogin
             onSuccess={handleGoogleSignIn}
@@ -133,8 +156,7 @@ const Login = () => {
             className="mt-4"
           />
         </GoogleOAuthProvider>
-     </div>
-     
+      </div>
     </div>
   );
 };

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const {OAuth2Client} = require("google-auth-library");
+const emailService = require("../service/emailService");
 
 const {validationResult} = require("express-validator");
 
@@ -199,14 +200,115 @@ const logout = (req, res) => {
   }
 };
 
+// Generate 6-digit code
+const generateResetCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
 
+const sendResetPasswordToken = async (req, res) => {
+  try {
+    const { email } = req.body;
 
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
 
+    // Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User with this email does not exist" });
+    }
 
+    // Generate 6-digit code
+    const resetCode = generateResetCode();
+    const expiry = new Date();
+    expiry.setMinutes(expiry.getMinutes() + 10); // Code expires in 10 minutes
+
+    // Update user with reset code and expiry
+    user.resetPasswordCode = resetCode;
+    user.resetPasswordExpiry = expiry;
+    await user.save();
+
+    // Send email with reset code
+    const subject = "Password Reset Code";
+    const body = `Your password reset code is: ${resetCode}\n\nThis code will expire in 10 minutes.\n\nIf you didn't request this, please ignore this email.`;
+
+    await emailService.send(email, subject, body);
+
+    res.status(200).json({
+      message: "Reset code sent to your email address"
+    });
+
+  } catch (error) {
+    console.error("Error sending reset password token:", error);
+    res.status(500).json({ 
+      message: "Internal server error", 
+      error: error.message 
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+
+    if (!email || !code || !newPassword) {
+      return res.status(400).json({ 
+        message: "Email, code, and new password are required" 
+      });
+    }
+
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if reset code exists and matches
+    if (!user.resetPasswordCode || user.resetPasswordCode !== code) {
+      return res.status(400).json({ message: "Invalid reset code" });
+    }
+
+    // Check if code has expired
+    if (!user.resetPasswordExpiry || new Date() > user.resetPasswordExpiry) {
+      return res.status(400).json({ message: "Reset code has expired" });
+    }
+
+    // Validate new password
+    if (newPassword.length < 6) {
+      return res.status(400).json({ 
+        message: "Password must be at least 6 characters long" 
+      });
+    }
+
+    // Hash new password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update user password and clear reset fields
+    user.password = hashedPassword;
+    user.resetPasswordCode = undefined;
+    user.resetPasswordExpiry = undefined;
+    await user.save();
+
+    res.status(200).json({
+      message: "Password reset successfully"
+    });
+
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ 
+      message: "Internal server error", 
+      error: error.message 
+    });
+  }
+};
 
 module.exports = {
   login,
   logout,
   signup,
-  googleAuth
+  googleAuth,
+  sendResetPasswordToken,
+  resetPassword
 };

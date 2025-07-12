@@ -5,6 +5,8 @@ import axios from 'axios'
 
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ForgetPassword from './pages/ForgetPassword'
+import ResetPassword from './pages/ResetPassword'
 import AppLayout from './layout/AppLayout'
 import Dashboard from './pages/Dashboard'
 import Error from './pages/Error'
@@ -93,6 +95,22 @@ const App = () => {
         ? <Navigate to='/dashboard' /> 
         : <AppLayout> 
           <Register /> 
+        </AppLayout>
+      } />
+
+      <Route path="/forget-password" element={
+        userDetails
+        ? <Navigate to='/dashboard' /> 
+        : <AppLayout> 
+          <ForgetPassword /> 
+        </AppLayout>
+      } />
+
+      <Route path="/reset-password" element={
+        userDetails
+        ? <Navigate to='/dashboard' /> 
+        : <AppLayout> 
+          <ResetPassword /> 
         </AppLayout>
       } />
 

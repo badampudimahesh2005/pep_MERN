@@ -48,6 +48,14 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    resetPasswordCode: {
+        type: String,
+        required: false,
+    },
+    resetPasswordExpiry: {
+        type: Date,
+        required: false,
+    },
     subscription: {
         type: subscriptionSchema,
         default: null,
