@@ -286,7 +286,7 @@ const LinkDashboard = () => {
       {/* Close Button */}
       <button
         onClick={handleModalClose}
-        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none"
+        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer"
       >
         <span className="text-2xl">&times;</span>
       </button>
@@ -360,7 +360,7 @@ const LinkDashboard = () => {
         <div className="mt-6">
           <button
             type="submit"
-            className=" w-full rounded bg-[#0d1b2a] px-4 py-2 text-white hover:bg-[#1b2631] focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className=" w-full rounded bg-[#0d1b2a] px-4 py-2 text-white hover:bg-[#1b2631]  cursor-pointer"
           >
             Submit
           </button>

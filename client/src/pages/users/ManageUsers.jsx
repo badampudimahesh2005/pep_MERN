@@ -212,7 +212,7 @@ const ManageUsers = () => {
             {/* close button */}
             <button
             onClick={() => setShowModal(false)}
-            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 cursor-pointer"
             >
                 <span className='text-2xl'>&times;</span>
             </button>
@@ -291,13 +291,13 @@ const ManageUsers = () => {
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={() => setShowDeleteModal(false)}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-colors"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleDelete}
-            className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors"
+            className="flex-1 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors cursor-pointer"
           >
            {formLoading ? 'Deleting...' : 'Delete'}
           </button>

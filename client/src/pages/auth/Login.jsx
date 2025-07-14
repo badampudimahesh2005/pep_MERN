@@ -4,8 +4,8 @@ import axios from "axios";
 import { Eye, EyeOff } from "lucide-react";
 import {GoogleOAuthProvider, GoogleLogin} from '@react-oauth/google';
 import { useDispatch } from "react-redux";
-import { setUser } from "../store/slices/userSlice";
-import SERVER_URL from "../utils";
+import { setUser } from "../../store/slices/userSlice";
+import SERVER_URL from "../../utils";
 
 const Login = () => {
   const [userData, setUserData] = useState({

@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { clearUser } from '../store/slices/userSlice';
 import {  EllipsisVertical } from 'lucide-react';
-import ResetPassword from '../pages/ResetPassword';
+import ResetPassword from '../pages/auth/ResetPassword';
 
 
 export default function Dropdown() {

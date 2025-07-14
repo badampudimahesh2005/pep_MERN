@@ -2,9 +2,9 @@
 import axios from 'axios';
 import {useState} from 'react';
 import { Eye, EyeOff } from 'lucide-react'; 
-import { setUser } from '../store/slices/userSlice';
+import { setUser } from '../../store/slices/userSlice';
 import { useDispatch } from 'react-redux';
-import SERVER_URL from '../utils';
+import SERVER_URL from '../../utils';
 import { Link } from 'react-router-dom';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 

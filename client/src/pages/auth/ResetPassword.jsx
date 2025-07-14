@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react';
-import SERVER_URL from '../utils';
+import SERVER_URL from '../../utils';
 
 const ResetPassword = ({ hideEmailField = false, onSuccess }) => {
   const [formData, setFormData] = useState({
