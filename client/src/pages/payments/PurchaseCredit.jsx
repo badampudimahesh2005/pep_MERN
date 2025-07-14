@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import axios from "axios";
-import './PurchaseCredit.css';
 import SERVER_URL, { CREDIT_PACKS, PLAN_IDS, pricingList } from "../../utils";
 import { setUser } from "../../store/slices/userSlice";
 
@@ -92,113 +91,120 @@ function PurchaseCredit() {
   };
 
   return (
-   <section className="py-10 bg-white" id="pricing-section">
-  <div className="max-w-6xl mx-auto px-4">
-    {errors.message && <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">{errors.message}</div>}
-    {message && <div className="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">{message}</div>}
+    
+      <section className=" flex-1 flex flex-col  p-10">
+        <div className="flex-grow flex items-center ">
+          <div className="max-w-6xl mx-auto px-4">
+          {errors.message && <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">{errors.message}</div>}
+            {message && <div className="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">{message}</div>}
 
-    <div className="flex flex-col md:flex-row justify-between items-start mb-10">
+    <div className="flex flex-col md:flex-row justify-between items-start mb-10 text-black">
       <div>
-        <h3 className="text-2xl font-semibold text-gray-800">Choose Plan</h3>
-        <p className="text-gray-600 mt-2">
-          Flexible options: one-time credits or recurring subscriptions.
-        </p>
+        <h3 className="text-3xl font-bold">Choose Plan</h3>
+        <p className="text-gray-900 mt-2">Flexible options: one-time credits or recurring subscriptions.</p>
       </div>
 
       <div className="text-right mt-6 md:mt-0">
-        <h3 className="text-2xl font-semibold text-gray-800">Current Balance</h3>
-        <p className="text-gray-600 mt-2">{userDetails.credits} Credits</p>
+        <h3 className="text-2xl font-semibold">Current Balance</h3>
+        <p className="text-gray-900 mt-2">{userDetails.credits} Credits</p>
       </div>
     </div>
 
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      {/* Credit Packs */}
-      <div className="border rounded-lg p-6 text-center shadow-sm">
-        <div className="mb-4">
-          <p className="text-lg font-bold text-blue-600">Credit Packs</p>
-        </div>
-        <ul className="mb-4 space-y-2">
+      {/* Credit Pack Card */}
+      <div className="rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-8 shadow-md">
+        <h2 className="text-3xl font-bold mb-2">CREDITS</h2>
+        <p className="mb-4 text-sm opacity-90">One-time use. Perfect for quick boosts.</p>
+        <ul className="text-white space-y-1 mb-6">
           {CREDIT_PACKS.map((c) => (
-            <li key={c} className="text-gray-700">
-              {c} CREDITS FOR ₹{c}
+            <li key={c} className="flex items-center">
+              ✅ {c} Credits for ₹{c}
             </li>
           ))}
         </ul>
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-white text-indigo-600 font-semibold px-4 py-2 rounded hover:bg-gray-100 w-full cursor-pointer"
           onClick={() => setShowModal(true)}
         >
-          Buy Credits
+          BUY CREDITS
         </button>
       </div>
 
-      {/* Monthly Plan */}
-      <div className="border rounded-lg p-6 text-center shadow-sm">
-        <div className="mb-4">
-          <p className="text-lg font-bold text-blue-600">₹199/month</p>
-        </div>
-        <ul className="mb-4 space-y-2">
+      {/* Monthly Subscription Plan */}
+      <div className="rounded-lg bg-gradient-to-r from-purple-500 to-blue-600 text-white p-8 shadow-md">
+        <h2 className="text-3xl font-bold mb-2">₹500/mo</h2>
+        <p className="text-lg font-semibold mb-4">STANDARD</p>
+        <ul className="space-y-1 mb-6">
           {pricingList[1].list.map((item, i) => (
-            <li key={i} className="text-gray-700">
-              {item.detail}
+            <li key={i} className="flex items-center">
+              ✅ {item.detail}
             </li>
           ))}
         </ul>
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-white text-purple-600 font-semibold px-4 py-2 rounded hover:bg-gray-100 w-full cursor-pointer"
           onClick={() => handleSubscribe('UNLIMITED_MONTHLY')}
         >
-          Subscribe Monthly
+          SUBSCRIBE MONTHLY
         </button>
       </div>
 
-      {/* Yearly Plan */}
-      <div className="border rounded-lg p-6 text-center shadow-sm">
-        <div className="mb-4">
-          <p className="text-lg font-bold text-blue-600">₹1990/year</p>
-        </div>
-        <ul className="mb-4 space-y-2">
+      {/* Yearly Subscription Plan */}
+      <div className="rounded-lg bg-gradient-to-r from-pink-500 to-red-500 text-white p-8 shadow-md">
+        <h2 className="text-3xl font-bold mb-2">₹1000/yr</h2>
+        <p className="text-lg font-semibold mb-4">PREMIUM</p>
+        <ul className="space-y-1 mb-6">
           {pricingList[2].list.map((item, i) => (
-            <li key={i} className="text-gray-700">
-              {item.detail}
+            <li key={i} className="flex items-center">
+              ✅ {item.detail}
             </li>
           ))}
         </ul>
         <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-white text-pink-600 font-semibold px-4 py-2 rounded hover:bg-gray-100 w-full cursor-pointer"
           onClick={() => handleSubscribe('UNLIMITED_YEARLY')}
         >
-          Subscribe Yearly
+          SUBSCRIBE YEARLY
         </button>
       </div>
     </div>
 
     {/* Modal Replacement */}
-    {showModal && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white w-full max-w-md rounded shadow-lg p-6 relative">
+   {showModal && (
+  <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4">
+    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative animate-fade-in">
+      
+      {/* Close Button */}
+      <button
+        onClick={() => setShowModal(false)}
+        className="absolute top-3 right-4 text-gray-500 hover:text-red-500 text-2xl font-bold cursor-pointer"
+      >
+        &times;
+      </button>
+
+      {/* Title */}
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+        Buy Credits
+      </h2>
+
+      {/* Credit Options */}
+      <div className="flex flex-wrap justify-center gap-3">
+        {CREDIT_PACKS.map((c) => (
           <button
-            className="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-2xl"
-            onClick={() => setShowModal(false)}
+            key={c}
+            onClick={() => handleBuyCredits(c)}
+            className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-5 py-2 rounded-full font-medium hover:scale-105 transition-transform duration-200 shadow-md cursor-pointer"
           >
-            &times;
+            Buy {c} Credits
           </button>
-          <h2 className="text-xl font-semibold text-center mb-4">Buy Credits</h2>
-          <div className="flex flex-wrap justify-center gap-2">
-            {CREDIT_PACKS.map((c) => (
-              <button
-                key={c}
-                className="border border-blue-600 text-blue-600 px-4 py-2 rounded hover:bg-blue-50"
-                onClick={() => handleBuyCredits(c)}
-              >
-                Buy {c} Credits
-              </button>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
-    )}
+    </div>
   </div>
+)}
+
+        </div>
+        </div>
 </section>
 
   );

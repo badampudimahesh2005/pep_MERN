@@ -1,5 +1,4 @@
-import { Rocket, Link, LineChart, Users, LayoutDashboard } from 'lucide-react';
-
+import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div className="bg-gradient-to-br from-gray-900 to-black text-white min-h-screen">
@@ -17,12 +16,12 @@ const Home = () => {
         >
           Create, track, and optimize affiliate links like a pro. Whether you're a content creator, student ambassador, or digital marketer — manage campaigns, shorten URLs, and unlock insights that drive performance.
         </p>
-        <a 
-          href="/signup"
+        <Link
+          to="/register"
           className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-xl text-lg transition"
         >
           Get Started for Free
-        </a>
+        </Link>
       </section>
     </div>
   );

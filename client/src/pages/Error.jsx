@@ -1,6 +1,12 @@
-import React from "react";
+import {Link, useNavigate} from "react-router-dom";
 
 const Error = () => {
+    const navigate = useNavigate();
+
+    const handleGoBack = () => {
+        navigate(-1); // Go back to previous page
+    };
+
     return (
         <div style={{
             minHeight: "100vh",
@@ -21,20 +27,38 @@ const Error = () => {
             <p style={{ fontSize: "1.2rem", color: "#64748b", marginBottom: "2rem" }}>
                 Something went wrong. The page you are looking for doesn't exist or an error occurred.
             </p>
-            <a
-                href="/"
-                style={{
-                    padding: "0.75rem 1.5rem",
-                    background: "#2563eb",
-                    color: "#fff",
-                    borderRadius: "0.375rem",
-                    textDecoration: "none",
-                    fontWeight: "500",
-                    boxShadow: "0 2px 8px rgba(37,99,235,0.08)"
-                }}
-            >
-                Go Home
-            </a>
+            <div style={{ display: "flex", gap: "1rem" }}>
+                <button
+                    onClick={handleGoBack}
+                    style={{
+                        padding: "0.75rem 1.5rem",
+                        background: "#2563eb",
+                        color: "#fff",
+                        borderRadius: "0.375rem",
+                        textDecoration: "none",
+                        fontWeight: "500",
+                        boxShadow: "0 2px 8px rgba(37,99,235,0.08)",
+                        border: "none",
+                        cursor: "pointer"
+                    }}
+                >
+                    Go Back
+                </button>
+                <Link
+                    to="/"
+                    style={{
+                        padding: "0.75rem 1.5rem",
+                        background: "#64748b",
+                        color: "#fff",
+                        borderRadius: "0.375rem",
+                        textDecoration: "none",
+                        fontWeight: "500",
+                        boxShadow: "0 2px 8px rgba(100,116,139,0.08)"
+                    }}
+                >
+                    Go Home
+                </Link>
+            </div>
         </div>
     );
 };

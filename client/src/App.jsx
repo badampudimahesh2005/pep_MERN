@@ -162,8 +162,8 @@ const App = () => {
         </UserLayout> :
         <AppLayout><Error /></AppLayout>
       } />
-      
-      <Route path="*" element={<AppLayout> <h1 className="text-2xl text-center mt-10">404 Not Found</h1> </AppLayout>} />
+
+      <Route path="*" element={<AppLayout> <Error /></AppLayout>} />
     </Routes>
   )
 }
