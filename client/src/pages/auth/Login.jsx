@@ -85,7 +85,7 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto mt-10">
+    <div className="bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto my-6">
       <h1 className="text-xl text-center font-bold mb-4 text-[#0d1b2a]">Sign in to Continue</h1>
       <form onSubmit={handleSubmit} className="flex flex-col">
         <label className="block mb-2">Email:</label>

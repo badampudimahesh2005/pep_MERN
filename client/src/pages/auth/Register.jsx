@@ -86,7 +86,7 @@ const Register = () => {
   }
    
   return (
-    <div className='bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto mt-10 '>
+    <div className='bg-gray-100 p-6 rounded-lg shadow-md max-w-md mx-auto my-6'>
       <h1 className='text-xl text-center mb-4 font-bold text-[#0d1b2a]'>Sign up with a new account</h1>
       <form onSubmit={handleSubmit} className='flex flex-col '>
 

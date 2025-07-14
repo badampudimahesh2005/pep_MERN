@@ -5,7 +5,7 @@ const UserLayout = ({ children }) => {
   return (
   <div className="flex flex-col min-h-screen">
       <UserHeader />
-      <main className="flex-1 pb-6">
+      <main className="flex-1">
         {children}
       </main>
       <UserFooter />
